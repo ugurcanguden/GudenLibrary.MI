@@ -1,16 +1,15 @@
 import React, { useState, Component  } from 'react'
 import { useHistory, withRouter} from 'react-router-dom'
 import { Link } from 'react-router-dom';
-
- 
 import './Navbar.css';
 import { ConfirmMessage } from '../../components/utilComponents/ConfirmMessage';
-
 import { RouteComponentProps } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import {API_BASE,axiosConfig,axiosConfigWithToken} from '../../config/env';
 import axios from 'axios';
-import { IconContext } from 'react-icons';
+import  *as FaIcons  from "react-icons/fa";
+import  IconContext from "react-icons";
+
  
  
 type NavbarProps =
@@ -43,10 +42,11 @@ type NavbarProps =
         }        
     }
 
-    componentDidMount()
+    componentWillMount()
     {
         axios.get(`${API_BASE}/Auth/getMenulistbyUseId`, axiosConfigWithToken)
-        .then((response)=>{           
+        .then((response)=>
+        {           console.log(response.data);
             this.setState({
                 SidebarData:response.data.data 
             })
@@ -54,8 +54,11 @@ type NavbarProps =
         .catch((err)=>{
 
         })
+        
     }
+    
 
+    
     render() 
     {
      const {sidebar,confirmShow}=this.state;
@@ -82,19 +85,24 @@ type NavbarProps =
      }
     const {SidebarData}=this.state;
 
+    
+    
+ 
+ 
      return (        
                 <React.Fragment>
                     <ConfirmMessage  isShow={confirmShow} onConfirm={onConfirm}/>
-                    {/* <IconContext.Provider value={{color:'#fff'}}> */}
+                  
                     <div  className="navbar">
                     <div  className="navbar-left">
                             <Link to='#' className='menu-bars-left'>
-                                {/* <FaIcons.FaBars onClick={showSideBar}/>  */}
+                            <FaIcons.FaHome onClick={showSideBar} />
+                               
                             </Link>           
                     </div>
                     <div  className="navbar-rigth">
                             <Button onClick={()=>this.setState({confirmShow:true})}  className='menu-bars-rigth'>
-                                {/* <IoIcos.IoIosExit />  */}
+                            <FaIcons.FaPowerOff  />
                             </Button>                   
                     </div>    
                     </div>
@@ -102,17 +110,16 @@ type NavbarProps =
                         <ul className='nav-menu-items' onClick={showSideBar}>
                             <li className='navbar-toggle'>
                                 <Link to='#' className='menu-bars-left'>
-                                    {/* <AiIcons.AiOutlineArrowLeft/> */}
+                                    <FaIcons.FaAlignLeft></FaIcons.FaAlignLeft>
                                 </Link>
                             </li>
                             {
-                                SidebarData.length>0
-                                &&SidebarData.map((item,index)=>{
+                                SidebarData.map((item,index)=>{
                                     return (
                                         <li key={index} className={item.cName} >
                                             <Link to={item.path} onClick={()=> this.props.history.push(item.path)}>
-                                            <IconContext.Provider value={{ className: "top-react-icons" }}/>
-                                            {/* <FontAwesomeIcon icon={"coffee"}   /> */}
+                                        
+                                           <FaIcons.FaCubes  />
                                                 <span>
                                                     {item.title}
                                                 </span>
@@ -131,4 +138,4 @@ type NavbarProps =
     }
 }
 export default withRouter(Navbar)
-
+ 

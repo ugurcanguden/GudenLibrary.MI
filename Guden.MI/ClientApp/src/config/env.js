@@ -1,4 +1,4 @@
-export const API_BASE="https://localhost:44337/api";
+export const API_BASE="https://gudenapi.azurewebsites.net/api";
 
 
 
