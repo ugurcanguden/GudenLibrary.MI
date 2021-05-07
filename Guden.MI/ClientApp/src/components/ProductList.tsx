@@ -1,7 +1,7 @@
 
 import PropTypes from 'prop-types';
 import Product from './Product'; 
-import {itemProduct,productActionResult} from '../actions/products';
+import {itemProduct,productActionResult} from '../actions/productsAction';
 import { Grid } from 'semantic-ui-react'
 import { HashLoader } from 'react-spinners';
 import { RouteComponentProps } from 'react-router-dom';

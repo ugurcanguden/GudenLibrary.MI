@@ -2,14 +2,14 @@ import {
   LOGIN_FULFILLED,
   LOGIN_REJECTED,
   LOGIN_PENDING
-} from "../actions/auth";
-import setAccessToken from '../utils/setAccessToken';
+} from "../../actions/user/authAction";
+import {setAccessToken} from '../../utils/AccessToken';
 
 const user = JSON.parse(localStorage.getItem("user"));
 
   const initialState = user
-    ? { isLoggedIn: true, user , fetching:false}
-    : { isLoggedIn: false, user: null , fetching:false}
+    ? { isLoggedIn: true, user , fetching:false,message:"",isShowMessage:false,success:false}
+    : { isLoggedIn: false, user: null , fetching:false,message:"",isShowMessage:false,success:false}
 
  
 
@@ -26,22 +26,31 @@ const user = JSON.parse(localStorage.getItem("user"));
             ...state,
             isLoggedIn: true,
             user: action.payload,
-            fetching:false
+            fetching:false,
+            isShowMessage:true,
+            message:action.payload.message,
+            success:action.payload.success  
           };
         case LOGIN_REJECTED:
           return {
             ...state,
             isLoggedIn: false,
             user: null,
-            fetching:false
+            fetching:false,
+            isShowMessage:true,
+            message:action.payload.message,
+            success:action.payload.success  
           }; 
           case LOGIN_PENDING:
             return {
               ...state,
               isLoggedIn: false,
               user: null,
-              fetching:true
+              fetching:true,
+              isShowMessage:false,
+              message:"" 
             }; 
+         
           default:
           return state;
       } 

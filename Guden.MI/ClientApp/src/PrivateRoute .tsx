@@ -1,7 +1,7 @@
 
 import React, { Component, ReactNode } from 'react'
 import { Route, Redirect, RouteProps } from 'react-router-dom';
- 
+import { useDispatch } from 'react-redux';
 interface PrivateRouteProps extends RouteProps {
     // tslint:disable-next-line:no-any
     component: any;
@@ -9,10 +9,11 @@ interface PrivateRouteProps extends RouteProps {
 
 const PrivateRoute = (props: PrivateRouteProps) => {
     const { component: Component, ...rest } = props;
+    const dispatch = useDispatch();
     return (
             <Route { ...rest } render={ props => (
             localStorage.getItem("accessToken") ? 
-            <Component {...props} /> : 
+            <Component {...props} dispatch={dispatch} /> : 
             <Redirect to={{ pathname: '/LoginPage', state: { from: props.location } }} />
         ) }
         />
@@ -20,15 +21,4 @@ const PrivateRoute = (props: PrivateRouteProps) => {
 }
 
 export default PrivateRoute;
-
-// import React, { Component } from 'react'
-// import { Route, Redirect } from 'react-router-dom';
-// export default class PrivateRoute  extends Component {
-//     render() {
-//         return (
-//             <div>
-                
-//             </div>
-//         )
-//     }
-// }
+ 

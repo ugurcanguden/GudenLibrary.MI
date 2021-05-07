@@ -18,9 +18,39 @@
 }
  
  
-  .centerContainerChild {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+.centerContainerChild {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form {
+  position: center;
+  margin-top: 5%;   
+  padding-top: 2%;
+  margin-left: 25%;   
+  margin-right: 25%;  
+  padding-block-end: 2%;
+  margin-block-end: 25%;  
+  background-color: whitesmoke;
+}
+
+.formSubmitButtonDivRight {
+  position: absolute;
+  right:    0; 
+  margin-top: 5%; 
+}
+.formSubmitButtonDivLeft {
+  position: absolute;
+  left:    0; 
+  margin-top: 5%; 
+}
+.formSubmitButtonRight 
+{
+  padding-right: 1px; 
+}
+.formSubmitButtonLeft
+{
+  padding-left: 1px; 
+}

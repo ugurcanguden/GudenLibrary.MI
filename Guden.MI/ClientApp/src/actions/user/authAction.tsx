@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {API_BASE,axiosConfig} from '../config/env';
+import {API_BASE,axiosConfig,axiosConfigWithToken} from '../../config/env';
 
 export const LOGIN_FULFILLED="LOGIN_FULFILLED";
 export const LOGIN_REJECTED="LOGIN_REJECTED";
@@ -11,7 +11,7 @@ export const  login = (email: string,password: string) =>
     var postData = {
       Email: email,
       Password: password
-    };
+    }; 
     return  (dispatch: (arg0: { type: string; payload: Promise<any>; }) => void)=>{
             dispatch({
                 type:"LOGIN",
@@ -22,5 +22,3 @@ export const  login = (email: string,password: string) =>
     }
 }
 
-
-export default { login };

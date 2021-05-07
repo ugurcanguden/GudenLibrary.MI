@@ -1,127 +1,101 @@
 
-import PropTypes from 'prop-types';
-import '../../App.css';
-import { Button, Grid, Icon, Modal } from 'semantic-ui-react' 
+import React, { Component } from 'react';  
+import { Button,  Modal } from 'semantic-ui-react' 
 import 'semantic-ui-css/semantic.min.css'
-import React, { Component } from 'react'
-import { RouteComponentProps } from 'react-router-dom';
-
-
-interface IMessageBoxProps {
-pprocessCount:number,
-mbItems:{
+import '../../App.css'; 
+  
+export type MessageBoxProps=
+{  
     isOpen:boolean,
     isSuccess:boolean, 
     messageText:string,
     initialSize:string,
     header:string,
-    redirectUrl:string
-} 
+    redirectUrl:string ,
+    history:any
 } ;  
-interface IMessageBoxState {
-processCount:number,
-messageBoxItems:{
-    isOpen:boolean,
-    isSuccess:boolean, 
-    messageText:string,
-    initialSize:string,
-    header:string,
-    redirectUrl:string
-}
+
+type MessageBoxState=
+{  
+    isOpen:boolean 
 };
-type MessageBoxProps =
-IMessageBoxProps
-& RouteComponentProps<any>
+    
 
-
-export class MessageBox extends Component<MessageBoxProps,IMessageBoxState> 
+export class MessageBox extends Component<MessageBoxProps,MessageBoxState>
 {
-    constructor(props: Readonly<MessageBoxProps>) 
-    {
-        super(props);
-        // reset login status
-        this.state = {  
-            processCount:props.pprocessCount,         
-            messageBoxItems:{
-                isOpen:props.mbItems.isOpen,
-                isSuccess:props.mbItems.isSuccess, 
-                messageText:props.mbItems.messageText,
-                initialSize:props.mbItems.initialSize,
-                header:"",
-                redirectUrl:""
-            }
-        }; 
-    };
+   constructor(props: any)
+   {
+       super(props)
+       this.state={
+           isOpen:false
+       }
+   }
 
-    static propTypes = {
-        mbItems: PropTypes.object.isRequired
-    };
+   componentDidMount(){
+    const { isOpen } = this.props;
+    if(isOpen)
+    this.setState({
+        isOpen
+    });
+   }
+    componentDidUpdate(prevProps: MessageBoxProps) {
+        const { isOpen } = this.props;
 
-    componentDidUpdate(_prevprops: any,_prevState: any)
-    {
-        const {messageBoxItems,processCount}=this.state;
-        const {mbItems,pprocessCount}=this.props;
-        if(processCount!=pprocessCount)
-        {       
-            this.setState({ 
-                messageBoxItems: { ...messageBoxItems, isOpen: true,isSuccess:mbItems.isSuccess,messageText:mbItems.messageText,redirectUrl:mbItems.redirectUrl} ,
-                processCount:pprocessCount
-            })                
-        }
-    };
-
-        updateMessageBoxVisible=()=>
-        {
-            const {messageBoxItems}=this.state;    
-            const {mbItems,history}=this.props;    
+        if (prevProps.isOpen != isOpen && (isOpen != undefined || isOpen != null))
             this.setState({
-                messageBoxItems:{
-                    ...messageBoxItems, 
-                    isOpen: !messageBoxItems.isOpen               
-                }
+                isOpen
             });
-            if(messageBoxItems.redirectUrl!=""&&messageBoxItems.isSuccess)//eğer bir link verildiyse yönlendirme yaoar...
-            {
-                history.push(messageBoxItems.redirectUrl);
-                window.location.reload();
-            }
-                
-        };
+    }
+  
+    UpdateMessageBoxVisible=()=>{
+        const { isSuccess,redirectUrl,history } = this.props;
+        this.setState({isOpen:false});
+        if(redirectUrl!=""&&isSuccess)
+        {
+            history.push(redirectUrl);            
+            window.location.reload(true);
+        }
+        
+        
+    }
+
     
     render() 
     {
-        const {messageBoxItems}=this.state;
+       
+        const {initialSize,isSuccess,header,messageText}=this.props;
+        const {isOpen}=this.state;
 
-
-        return ( 
-        
-                     
-                                    <Modal
-                                        className='centerContainerChild' 
-                                        style={{height:'auto'}}    
-                                        size={messageBoxItems.initialSize as any}
-                                        open={messageBoxItems.isOpen}
-                                        centered={false}
-                                        onClose={this.updateMessageBoxVisible}
-                                        >
-                                        <Modal.Header>{messageBoxItems.header}</Modal.Header>
-                                            <Modal.Content>  
-                                                <Modal.Description>
-                                                <p>{messageBoxItems.messageText}</p>
-                                                </Modal.Description>
-                                            </Modal.Content>
-                                        <Modal.Actions>
-                                        {!!!messageBoxItems.isSuccess&&<Button negative  onClick={this.updateMessageBoxVisible}>
-                                        Ok
-                                        </Button>}
-                                        {!!messageBoxItems.isSuccess&&<Button positive  onClick={this.updateMessageBoxVisible} >
-                                        Ok
-                                        </Button>}
-                                        </Modal.Actions>
-                                    </Modal>    
-                      
+        return (          
+           
+                    <Modal
+                    className='centerContainerChild' 
+                    style={{height:'auto'}}    
+                    size={initialSize as any}
+                    open={isOpen}
+                    centered={false}
+                    onClose={this.UpdateMessageBoxVisible}
+                    >
+                    <Modal.Header>{header}</Modal.Header>
+                        <Modal.Content>  
+                            <Modal.Description>
+                            <p>{messageText}</p>
+                            </Modal.Description>
+                        </Modal.Content>
+                    <Modal.Actions>
+                    {!!!isSuccess&&<Button negative onClick={this.UpdateMessageBoxVisible}>
+                    Ok
+                    </Button>}
+                    {!!isSuccess&&<Button positive   onClick={this.UpdateMessageBoxVisible}>
+                    Ok
+                    </Button>}
+                    </Modal.Actions>
+                </Modal>  
             )
     }
 }
 
-export default MessageBox
+  
+
+ 
+ 

@@ -11,7 +11,7 @@ type ConfirmMessageProps =
     open:boolean    
   };
 
-  export default  class ConfirmMessageBase extends Component<ConfirmMessageProps,ConfirmMessageState> 
+export class  ConfirmMessage extends Component<ConfirmMessageProps,ConfirmMessageState> 
 {
     constructor(props: Readonly<ConfirmMessageProps>) 
     {

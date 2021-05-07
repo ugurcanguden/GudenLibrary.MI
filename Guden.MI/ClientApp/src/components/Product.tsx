@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Icon, Image, Grid } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
-import {itemProduct} from '../actions/products';
+import {itemProduct} from '../actions/productsAction';
 
 type productType={
     productName:String

@@ -1,14 +1,11 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from 'react'  
 import { RouteComponentProps } from 'react-router-dom'
-import { AnyAction, bindActionCreators, Dispatch } from 'redux'
-import { Grid } from 'semantic-ui-react'
-import { fetchProduct, productActionResult } from '../actions/products'
-import GridView,{GridViewProps} from '../components/BaseComponents/GridView'
- 
+import { fetchProduct } from '../actions/productsAction';
+import GridView, { GVProps } from '../components/BaseComponents/GridView';
+
   type HomeProps ={
-    dispatch:any
-    product:productActionResult 
+    dispatch:any;  
+    product:any ;
   }  
   &RouteComponentProps<any>
  ;
@@ -21,63 +18,49 @@ import GridView,{GridViewProps} from '../components/BaseComponents/GridView'
         super(props)
     }
 
-     gvProps:GridViewProps={
-        noDataFoundMessage:"ürün bulunmadı",
-        headers:
-        [
-            {
-                key:"productName", //entity Name
-                headerName:"Ürün Adı"//Kolon adı..
-            },
-            {
-                key:"quantityPerUnit",
-                headerName:"Açıklama"
-            },
-            {
-                key:"unitPrice",
-                headerName:"Fiyat"
-            },
-            {
-                key:"unitsInStock",
-                headerName:"Stok Adeti"
-            }
-        ],
-        activePageIndex:0,
-        selectMethod:"",
-        data:[ this.props.product.products              
-            ]
-    }
-    componentDidMount()
-    {
-        this.props.dispatch(fetchProduct());
-    }  
+
+
     render() 
     {
        
+         
+
+        const gridViewProps:GVProps={
+            storeName:"product",
+            dispatchMethod:fetchProduct,
+            noDataFoundMessage:"",
+            headers:[ 
+                {
+                    key:"productName", //entity Name
+                    headerName:"Ürün Adı"//Kolon adı..
+                },
+                {
+                    key:"quantityPerUnit",
+                    headerName:"Açıklama"
+                },
+                {
+                    key:"unitPrice",
+                    headerName:"Fiyat"
+                },
+                {
+                    key:"unitsInStock",
+                    headerName:"Stok Adeti"
+                }   ], 
+                reduxStoreValues:null,
+                queryParams:{ 
+                },
+                sortColumb:"ProductName",
+                dispatch:this.props.dispatch
+             
+        }  
+    
         return (
-            
+                   <GridView {...gridViewProps}></GridView>
                
-                     <GridView {...this.gvProps} data={this.props.product.products}></GridView>
-               
-              
-        )
+       
+            )
     }
 }
-export default connect(
-    (state:{product:productActionResult}) => 
-    {
-        var product=state.product;
-        return {
-          product
-        }
-    }, function (dispatch: Dispatch<AnyAction>, props: any) {
-      return {
-        dispatch,
-        ...bindActionCreators({
-        ...fetchProduct
-      }, dispatch)
-      }
-    }
-    )(Home as any)
+export default (Home as any)
 
  

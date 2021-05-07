@@ -1,24 +1,33 @@
 import React, { useState, Component  } from 'react'
 import { useHistory, withRouter} from 'react-router-dom'
 import { Link } from 'react-router-dom';
-import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
-import * as IoIcos from 'react-icons/io'
-import {SidebarData} from './SidebarData';
-import './Navbar.css';
 
-import {IconContext} from 'react-icons'
-import  {ConfirmMessage} from '../../utils/index';
+ 
+import './Navbar.css';
+import { ConfirmMessage } from '../../components/utilComponents/ConfirmMessage';
+
 import { RouteComponentProps } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
+import {API_BASE,axiosConfig,axiosConfigWithToken} from '../../config/env';
+import axios from 'axios';
+import { IconContext } from 'react-icons';
+ 
  
 type NavbarProps =
   {   
    
   } & RouteComponentProps<any>;  
+  
+  type menuItems={
+            title:string,
+            path:string,
+            icon:string,
+            cName:string
+  }
   type NavbarState={
     confirmShow:boolean,
-    sidebar:boolean
+    sidebar:boolean,
+    SidebarData:menuItems[]
   };
 
 
@@ -29,8 +38,22 @@ type NavbarProps =
         super(props);
         this.state={
             confirmShow:false,
-            sidebar:false
+            sidebar:false,
+            SidebarData:[]
         }        
+    }
+
+    componentDidMount()
+    {
+        axios.get(`${API_BASE}/Auth/getMenulistbyUseId`, axiosConfigWithToken)
+        .then((response)=>{           
+            this.setState({
+                SidebarData:response.data.data 
+            })
+        })
+        .catch((err)=>{
+
+        })
     }
 
     render() 
@@ -51,26 +74,27 @@ type NavbarProps =
             confirmShow:false
          });
          if(isConfirm) //çıkmak istediğine emin ise..
-         {
-             console.log(this.props)
+         {           
             localStorage.clear();
             this.props.history.push('/Home');
             window.location.reload();
          }
      }
+    const {SidebarData}=this.state;
+
      return (        
                 <React.Fragment>
                     <ConfirmMessage  isShow={confirmShow} onConfirm={onConfirm}/>
-                    <IconContext.Provider value={{color:'#fff'}}>
+                    {/* <IconContext.Provider value={{color:'#fff'}}> */}
                     <div  className="navbar">
                     <div  className="navbar-left">
                             <Link to='#' className='menu-bars-left'>
-                                <FaIcons.FaBars onClick={showSideBar}/> 
+                                {/* <FaIcons.FaBars onClick={showSideBar}/>  */}
                             </Link>           
                     </div>
                     <div  className="navbar-rigth">
                             <Button onClick={()=>this.setState({confirmShow:true})}  className='menu-bars-rigth'>
-                                <IoIcos.IoIosExit /> 
+                                {/* <IoIcos.IoIosExit />  */}
                             </Button>                   
                     </div>    
                     </div>
@@ -78,15 +102,17 @@ type NavbarProps =
                         <ul className='nav-menu-items' onClick={showSideBar}>
                             <li className='navbar-toggle'>
                                 <Link to='#' className='menu-bars-left'>
-                                    <AiIcons.AiOutlineArrowLeft/>
+                                    {/* <AiIcons.AiOutlineArrowLeft/> */}
                                 </Link>
                             </li>
                             {
-                                SidebarData.map((item,index)=>{
+                                SidebarData.length>0
+                                &&SidebarData.map((item,index)=>{
                                     return (
                                         <li key={index} className={item.cName} >
-                                            <Link to={item.path}>
-                                                {item.icon}
+                                            <Link to={item.path} onClick={()=> this.props.history.push(item.path)}>
+                                            <IconContext.Provider value={{ className: "top-react-icons" }}/>
+                                            {/* <FontAwesomeIcon icon={"coffee"}   /> */}
                                                 <span>
                                                     {item.title}
                                                 </span>
@@ -98,13 +124,11 @@ type NavbarProps =
                         </ul>
                         
                     </nav>
-                </IconContext.Provider>
+                
                 </React.Fragment>
             )
     
     }
 }
 export default withRouter(Navbar)
-
-
 
